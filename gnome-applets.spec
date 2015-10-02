@@ -1,6 +1,6 @@
 %define glib2_version 2.44.0
 %define pango_version 1.2.0
-%define gtk3_version 3.2
+%define gtk3_version 3.15.2
 %define gnome_panel_version 3.16.1
 %define libgtop2_version 2.12.0
 %define libxklavier_version 4.0
@@ -19,14 +19,14 @@
 
 Summary:        Small applications for the GNOME panel
 Name:		gnome-applets
-Version:	3.17.2
+Version:	3.18.0
 Release:        1%{?dist}
 Epoch:          1
 License:	GPLv2+ and GFDL
 Group:          User Interface/Desktops
 URL:		http://www.gnome.org/
 # VCS: git:git://git.gnome.org/gnome-applets
-Source:		http://download.gnome.org/sources/%{name}/3.17/%{name}-%{version}.tar.xz
+Source:		http://download.gnome.org/sources/%{name}/3.18/%{name}-%{version}.tar.xz
 
 BuildRequires:  glib2-devel >= %{glib2_version}
 BuildRequires:  gtk3-devel >= %{gtk3_version}
@@ -175,6 +175,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Fri Oct 02 2015 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.18.0-1
+- Version bump for GNOME Flashback 3.18.0.
+
 * Wed Jul 15 2015 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.17.2-1
 - Unstable version bump
 
