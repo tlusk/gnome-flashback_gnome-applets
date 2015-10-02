@@ -136,7 +136,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files -f %{po_package}.lang
 %doc AUTHORS COPYING NEWS README
-%{_datadir}/pixmaps/*
 %{_datadir}/icons/hicolor/16x16/apps/*
 %{_datadir}/icons/hicolor/22x22/apps/*
 %{_datadir}/icons/hicolor/24x24/apps/*
@@ -148,6 +147,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/gnome-applets
 %{_bindir}/*
 %{python3_sitelib}/invest/
+%{_libdir}/gnome-applets/5.0/libwindow-picker-applet.so*
 %{_libexecdir}/gnome-panel/accessx-status-applet
 %{_libexecdir}/gnome-panel/battstat-applet-2
 %{_libexecdir}/gnome-panel/charpick_applet2
@@ -163,7 +163,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libexecdir}/gnome-panel/stickynotes_applet
 %endif
 %{_libexecdir}/gnome-panel/trashapplet
-%{_libexecdir}/gnome-panel/window-picker-applet
 %{_libexecdir}/gnome-panel/invest-applet
 %{_sysconfdir}/sound/events/battstat_applet.soundlist
 %{_sysconfdir}/dbus-1/system.d/org.gnome.CPUFreqSelector.conf
