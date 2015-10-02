@@ -106,9 +106,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{po_package} --all-name --with-gnome
 
 # Clean up unpackaged files
-rm -rf $RPM_BUILD_ROOT%{_localstatedir}/scrollkeeper
-rm -f $RPM_BUILD_ROOT%{_libdir}/libgweather.la
-rm -f $RPM_BUILD_ROOT%{_libdir}/libgweather.a
+rm -f $RPM_BUILD_ROOT%{_libdir}/gnome-applets/5.0/libwindow-picker-applet.{a,la}
 
 # drop non-XKB support files
 rm -rf $RPM_BUILD_ROOT%{_datadir}/xmodmap
@@ -154,6 +152,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libexecdir}/gnome-panel/cpufreq-applet
 %{_libexecdir}/gnome-panel/drivemount_applet2
 %{_libexecdir}/gnome-panel/geyes_applet2
+%{_libexecdir}/gnome-panel/gnome-brightness-applet
+%{_libexecdir}/gnome-panel/gnome-inhibit-applet
 %{_libexecdir}/gnome-panel/gweather-applet-2
 %{_libexecdir}/gnome-panel/mini_commander_applet
 %{_libexecdir}/gnome-panel/modem_applet
