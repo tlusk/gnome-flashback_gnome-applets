@@ -19,7 +19,7 @@
 
 Summary:        Small applications for the GNOME panel
 Name:		gnome-applets
-Version:	3.18.0
+Version:	3.18.1
 Release:        1%{?dist}
 Epoch:          1
 License:	GPLv2+ and GFDL
@@ -174,6 +174,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Tue Oct 13 2015 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.18.1-1
+- Update to 3.18.1.
+
 * Fri Oct 02 2015 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.18.0-1
 - Version bump for GNOME Flashback 3.18.0.
 
