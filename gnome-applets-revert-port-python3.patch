@@ -1,0 +1,217 @@
+From 355fa60e3e2d481826c87cf06be5c2386cd9c616 Mon Sep 17 00:00:00 2001
+From: Dmitry Shachnev <mitya57@gmail.com>
+Date: Mon, 13 Oct 2014 19:54:45 +0400
+Subject: invest-applet: Port to Python 3
+
+---
+ configure.ac                          |  3 +--
+ invest-applet/invest/__init__.py      | 15 +++++++++------
+ invest-applet/invest/chart.py         |  7 +++----
+ invest-applet/invest/invest-applet.py |  2 +-
+ invest-applet/invest/invest-chart     |  2 +-
+ invest-applet/invest/preferences.py   | 11 ++++++-----
+ invest-applet/invest/quotes.py        |  5 ++---
+ invest-applet/invest/test.py          |  3 +--
+ 8 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index d474ea5..98657dc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -41,7 +41,7 @@ AC_ISC_POSIX
+ AC_STDC_HEADERS
+ AM_PROG_LIBTOOL
+ AC_PATH_XTRA
+-AM_PATH_PYTHON(2.4)
++AM_PATH_PYTHON(3)
+ 
+ X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
+ AC_SUBST(X_LIBS)
+diff --git a/invest-applet/invest/__init__.py b/invest-applet/invest/__init__.py
+index 8eabc75..0ee8899 100644
+--- a/invest-applet/invest/__init__.py
++++ b/invest-applet/invest/__init__.py
+@@ -1,10 +1,9 @@
+-from __future__ import absolute_import
+ import os, sys, traceback
+ from os.path import join, exists, isdir, isfile, dirname, abspath, expanduser
+-from types import ListType
+ import datetime
+ from gi.repository import Gio
+-import cPickle
++import pickle
++from urllib.request import ProxyHandler, build_opener, install_opener
+ from . import networkmanager
+ 
+ # Autotools set the actual data_dir in defs.py
+@@ -70,7 +69,7 @@ def labelless_stock_format(stocks):
+ 		return False
+ 
+ 	# take the first element of the dict and check if its value is a list
+-	if type(stocks[stocks.keys()[0]]) is ListType:
++	if type(stocks[list(stocks.keys())[0]]) is list:
+ 		return True
+ 
+ 	# there is no list, so it is already the new stock file format
+@@ -123,7 +122,8 @@ def update_to_list_stock_format(stocks):
+ STOCKS_FILE = join(USER_INVEST_DIR, "stocks.pickle")
+ 
+ try:
+-	STOCKS = cPickle.load(file(STOCKS_FILE))
++	with open(STOCKS_FILE, 'rb') as stocks_file:
++		STOCKS = pickle.load(stocks_file)
+ 
+ 	# if the stocks file contains a list, the subsequent tests are obsolete
+ 	if type(STOCKS) != list:
+@@ -163,7 +163,8 @@ except Exception as msg:
+ 
+ CONFIG_FILE = join(USER_INVEST_DIR, "config.pickle")
+ try:
+-	CONFIG = cPickle.load(file(CONFIG_FILE))
++	with open(CONFIG_FILE, 'rb') as config_file:
++		CONFIG = pickle.load(config_file)
+ except Exception as msg:
+ 	error("Could not load the configuration from %s: %s" % (CONFIG_FILE, msg) )
+ 	CONFIG = {}       # default configuration
+@@ -209,6 +210,8 @@ def get_gnome_proxy():
+ 
+ 			# proxy config found, memorize
+ 			PROXY = {'http': url}
++			proxy_handler = ProxyHandler(proxies=PROXY)
++			install_opener(build_opener(proxy_handler))
+ 
+ 	except Exception as msg:
+ 		error("Failed to get proxy configuration from GSettings:\n%s" % msg)
+diff --git a/invest-applet/invest/chart.py b/invest-applet/invest/chart.py
+index 4e8c25d..7d81b80 100644
+--- a/invest-applet/invest/chart.py
++++ b/invest-applet/invest/chart.py
+@@ -1,11 +1,9 @@
+-#!/usr/bin/python
+-
+ from gi.repository import GObject, Gtk, GdkPixbuf
+ import os
+ import invest
+ from gettext import gettext as _
+ from os.path import join
+-import urllib
++import urllib.request, urllib.parse, urllib.error
+ from threading import Thread
+ 
+ AUTOREFRESH_TIMEOUT = 20*60*1000 # 15 minutes
+@@ -44,7 +42,8 @@ class ImageRetriever(Thread, _IdleObject):
+ 		
+ 	def run(self):
+ 		self.image = Gtk.Image()
+-		try: sock = urllib.urlopen(self.image_url, proxies = invest.PROXY)
++		try:
++			sock = urllib.request.urlopen(self.image_url)
+ 		except Exception as msg:
+ 			invest.debug("Error while opening %s: %s" % (self.image_url, msg))
+ 		else:
+diff --git a/invest-applet/invest/invest-applet.py b/invest-applet/invest/invest-applet.py
+index 6cc8eb3..deeaace 100755
+--- a/invest-applet/invest/invest-applet.py
++++ b/invest-applet/invest/invest-applet.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import getopt, sys
+ from os.path import abspath, dirname, exists, isdir, isfile, join
+diff --git a/invest-applet/invest/invest-chart b/invest-applet/invest/invest-chart
+index bb17bc8..0e87fd5 100755
+--- a/invest-applet/invest/invest-chart
++++ b/invest-applet/invest/invest-chart
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys, invest.chart, gtk
+ 
+diff --git a/invest-applet/invest/preferences.py b/invest-applet/invest/preferences.py
+index 23ffad1..ac46fce 100644
+--- a/invest-applet/invest/preferences.py
++++ b/invest-applet/invest/preferences.py
+@@ -1,11 +1,10 @@
+-from __future__ import absolute_import
+ from gettext import gettext as _
+ import locale
+ from os.path import join
+ from gi.repository import GObject, Gtk
+ import invest
+ from . import currencies
+-import cPickle
++import pickle
+ 
+ class PrefsDialog:
+ 	def __init__(self, applet):
+@@ -65,7 +64,7 @@ class PrefsDialog:
+ 				currency = self.format_currency(self.currencies[self.currency_code], self.currency_code)
+ 				self.currency.set_text(currency)
+ 
+-		for n in xrange (0, 5):
++		for n in range (0, 5):
+ 			self.create_cell (self.treeview, n, self.names[n], self.typs[n])
+ 		if self.currency_code != None:
+ 			self.add_exchange_column()
+@@ -163,7 +162,8 @@ class PrefsDialog:
+ 
+ 		# store the STOCKS into the pickles file
+ 		try:
+-			cPickle.dump(invest.STOCKS, file(invest.STOCKS_FILE, 'w'))
++			with open(invest.STOCKS_FILE, 'wb') as stocks_file:
++				pickle.dump(invest.STOCKS, stocks_file)
+ 			invest.debug('Stocks written to file')
+ 		except Exception as msg:
+ 			invest.error('Could not save stocks file: %s' % msg)
+@@ -175,7 +175,8 @@ class PrefsDialog:
+ 		invest.CONFIG['indexexpansion'] = self.indexexpansion.get_active()
+ 		invest.CONFIG['hidecharts'] = self.hidecharts.get_active()
+ 		try:
+-			cPickle.dump(invest.CONFIG, file(invest.CONFIG_FILE, 'w'))
++			with open(invest.CONFIG_FILE, 'wb') as config_file:
++				pickle.dump(invest.CONFIG, config_file)
+ 			invest.debug('Configuration written to file')
+ 		except Exception as msg:
+ 			invest.debug('Could not save configuration file: %s' % msg)
+diff --git a/invest-applet/invest/quotes.py b/invest-applet/invest/quotes.py
+index 9210bfb..1eda294 100644
+--- a/invest-applet/invest/quotes.py
++++ b/invest-applet/invest/quotes.py
+@@ -1,10 +1,9 @@
+-from __future__ import absolute_import
+ from os.path import join, getmtime
+ from gi.repository import GObject, Gtk, GdkPixbuf
+ from gettext import gettext as _
+ import csv
+ import locale
+-from urllib import urlopen
++from urllib.request import urlopen
+ import datetime
+ from threading import Thread
+ from os import listdir, unlink
+@@ -60,7 +59,7 @@ class QuotesRetriever(Thread, _IdleObject):
+ 		quotes_url = QUOTES_URL % {"s": self.tickers}
+ 		invest.debug("QuotesRetriever started: %s" % quotes_url);
+ 		try:
+-			quotes_file = urlopen(quotes_url, proxies = invest.PROXY)
++			quotes_file = urlopen(quotes_url)
+ 			self.data = quotes_file.read ()
+ 			quotes_file.close ()
+ 		except Exception as msg:
+diff --git a/invest-applet/invest/test.py b/invest-applet/invest/test.py
+index 1cf2242..6f5be90 100755
+--- a/invest-applet/invest/test.py
++++ b/invest-applet/invest/test.py
+@@ -1,6 +1,5 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+-from __future__ import absolute_import
+ import unittest
+ from os.path import abspath, dirname
+ import sys
+-- 
+cgit v0.11.2
+
