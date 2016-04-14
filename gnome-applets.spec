@@ -19,7 +19,7 @@
 
 Summary:        Small applications for the GNOME panel
 Name:		gnome-applets
-Version:	3.18.1
+Version:	3.18.2
 Release:        1%{?dist}
 Epoch:          1
 License:	GPLv2+ and GFDL
@@ -174,6 +174,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Thu Apr 14 2016 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.18.2-1
+- new version
+
 * Tue Oct 13 2015 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.18.1-1
 - Update to 3.18.1.
 
