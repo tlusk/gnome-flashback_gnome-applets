@@ -4,11 +4,10 @@
 %define gnome_panel_version 3.16.1
 %define libgtop2_version 2.12.0
 %define libxklavier_version 4.0
-%define libwnck_version 2.91.0
+%define libwnck_version 3.14.1
 %define dbus_version 1.1.2
 %define dbus_glib_version 0.74
 %define libnotify_version 0.7
-%define pygobject_version 2.26
 %define libgweather_version 3.17.1
 %define upower_version 0.9.4
 %define adwaita_icon_theme_version 3.14.0
@@ -19,14 +18,14 @@
 
 Summary:        Small applications for the GNOME panel
 Name:		gnome-applets
-Version:	3.18.2
+Version:	3.20.0
 Release:        1%{?dist}
 Epoch:          1
 License:	GPLv2+ and GFDL
 Group:          User Interface/Desktops
 URL:		http://www.gnome.org/
 # VCS: git:git://git.gnome.org/gnome-applets
-Source:		http://download.gnome.org/sources/%{name}/3.18/%{name}-%{version}.tar.xz
+Source:		http://download.gnome.org/sources/%{name}/3.20/%{name}-%{version}.tar.xz
 
 BuildRequires:  glib2-devel >= %{glib2_version}
 BuildRequires:  gtk3-devel >= %{gtk3_version}
@@ -37,7 +36,6 @@ BuildRequires:  libxklavier-devel >= %{libxklavier_version}
 BuildRequires:  libwnck3-devel >= %{libwnck_version}
 BuildRequires:  libnotify-devel >= %{libnotify_version}
 BuildRequires:  python3-devel
-BuildRequires:  pygobject3-devel >= %{pygobject_version}
 BuildRequires:  gucharmap-devel
 BuildRequires:  dbus-devel >= %{dbus_version}
 BuildRequires:  dbus-glib-devel >= %{dbus_glib_version}
@@ -149,6 +147,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libexecdir}/gnome-panel/accessx-status-applet
 %{_libexecdir}/gnome-panel/battstat-applet-2
 %{_libexecdir}/gnome-panel/charpick_applet2
+%{_libexecdir}/gnome-panel/command-applet
 %{_libexecdir}/gnome-panel/cpufreq-applet
 %{_libexecdir}/gnome-panel/drivemount_applet2
 %{_libexecdir}/gnome-panel/geyes_applet2
@@ -162,6 +161,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %if %{build_stickynotes}
 %{_libexecdir}/gnome-panel/stickynotes_applet
 %endif
+%{_libexecdir}/gnome-panel/timer-applet
 %{_libexecdir}/gnome-panel/trashapplet
 %{_libexecdir}/gnome-panel/invest-applet
 %{_sysconfdir}/sound/events/battstat_applet.soundlist
@@ -174,6 +174,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Mon Apr 18 2016 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.20.0-1
+- Version bump for GNOME Flashback 3.20.
+
 * Thu Apr 14 2016 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.18.2-1
 - new version
 
