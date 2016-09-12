@@ -19,7 +19,7 @@
 Summary:        Small applications for the GNOME panel
 Name:		gnome-applets
 Version:	3.20.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 License:	GPLv2+ and GFDL
 Group:          User Interface/Desktops
@@ -174,6 +174,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Mon Sep 12 2016 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.20.0-2
+- Update cpupower patch for kernel 4.7
+
 * Mon Apr 18 2016 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.20.0-1
 - Version bump for GNOME Flashback 3.20.
 
