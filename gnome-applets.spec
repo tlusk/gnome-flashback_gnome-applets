@@ -26,6 +26,7 @@ Group:          User Interface/Desktops
 URL:		http://www.gnome.org/
 # VCS: git:git://git.gnome.org/gnome-applets
 Source:		http://download.gnome.org/sources/%{name}/3.20/%{name}-%{version}.tar.xz
+Patch0:         gnome-applets-cpupower.patch
 
 BuildRequires:  glib2-devel >= %{glib2_version}
 BuildRequires:  gtk3-devel >= %{gtk3_version}
@@ -79,6 +80,7 @@ and more.
 
 %prep
 %setup -q
+%patch0 -p1
 
 autoreconf -i -f
 
