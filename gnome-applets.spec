@@ -1,7 +1,7 @@
 %define glib2_version 2.44.0
 %define pango_version 1.2.0
-%define gtk3_version 3.15.2
-%define gnome_panel_version 3.16.1
+%define gtk3_version 3.20.0
+%define gnome_panel_version 3.22.0
 %define libgtop2_version 2.12.0
 %define libxklavier_version 4.0
 %define libwnck_version 3.14.1
@@ -14,19 +14,16 @@
 
 %define po_package gnome-applets-3.0
 
-%define build_stickynotes 1
-
 Summary:        Small applications for the GNOME panel
 Name:		gnome-applets
-Version:	3.20.0
-Release:        2%{?dist}
+Version:	3.22.0
+Release:        1%{?dist}
 Epoch:          1
 License:	GPLv2+ and GFDL
 Group:          User Interface/Desktops
 URL:		http://www.gnome.org/
 # VCS: git:git://git.gnome.org/gnome-applets
-Source:		http://download.gnome.org/sources/%{name}/3.20/%{name}-%{version}.tar.xz
-Patch0:         gnome-applets-cpupower.patch
+Source:		http://download.gnome.org/sources/%{name}/3.22/%{name}-%{version}.tar.xz
 
 BuildRequires:  glib2-devel >= %{glib2_version}
 BuildRequires:  gtk3-devel >= %{gtk3_version}
@@ -36,7 +33,6 @@ BuildRequires:  pango-devel >= %{pango_version}
 BuildRequires:  libxklavier-devel >= %{libxklavier_version}
 BuildRequires:  libwnck3-devel >= %{libwnck_version}
 BuildRequires:  libnotify-devel >= %{libnotify_version}
-BuildRequires:  python3-devel
 BuildRequires:  gucharmap-devel
 BuildRequires:  dbus-devel >= %{dbus_version}
 BuildRequires:  dbus-glib-devel >= %{dbus_glib_version}
@@ -67,7 +63,6 @@ Requires:	gnome-panel >= %{gnome_panel_version}
 Requires:	libxklavier >= %{libxklavier_version}
 
 Requires:	dbus >= %{dbus_version}
-Requires:       python3-gobject
 
 Obsoletes:      battstat_applet
 Obsoletes:      gnome-cpufreq-applet
@@ -80,7 +75,6 @@ and more.
 
 %prep
 %setup -q
-%patch0 -p1
 
 autoreconf -i -f
 
@@ -106,14 +100,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{po_package} --all-name --with-gnome
 
 # Clean up unpackaged files
-rm -f $RPM_BUILD_ROOT%{_libdir}/gnome-applets/5.0/libwindow-picker-applet.{a,la}
+rm -f $RPM_BUILD_ROOT%{_libdir}/gnome-applets/libwindow-picker-applet.{a,la}
 
 # drop non-XKB support files
 rm -rf $RPM_BUILD_ROOT%{_datadir}/xmodmap
-
-%if ! %{build_stickynotes}
-	rm -f $RPM_BUILD_ROOT%{_libexecdir}/gnome-panel/stickynotes_applet
-%endif
 
 
 %post
@@ -143,41 +133,36 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/16x16/devices/*
 %{_datadir}/icons/hicolor/24x24/status/*
 %{_datadir}/gnome-applets
-%{_bindir}/*
-%{python3_sitelib}/invest/
-%{_libdir}/gnome-applets/5.0/libwindow-picker-applet.so*
-%{_libexecdir}/gnome-panel/accessx-status-applet
-%{_libexecdir}/gnome-panel/battstat-applet-2
-%{_libexecdir}/gnome-panel/charpick_applet2
-%{_libexecdir}/gnome-panel/command-applet
-%{_libexecdir}/gnome-panel/cpufreq-applet
-%{_libexecdir}/gnome-panel/drivemount_applet2
-%{_libexecdir}/gnome-panel/geyes_applet2
-%{_libexecdir}/gnome-panel/gnome-brightness-applet
-%{_libexecdir}/gnome-panel/gnome-inhibit-applet
-%{_libexecdir}/gnome-panel/gweather-applet-2
-%{_libexecdir}/gnome-panel/mini_commander_applet
-%{_libexecdir}/gnome-panel/modem_applet
-%{_libexecdir}/gnome-panel/multiload-applet-2
-%{_libexecdir}/gnome-panel/netspeed_applet2
-%if %{build_stickynotes}
-%{_libexecdir}/gnome-panel/stickynotes_applet
-%endif
-%{_libexecdir}/gnome-panel/timer-applet
-%{_libexecdir}/gnome-panel/trashapplet
-%{_libexecdir}/gnome-panel/invest-applet
+%dir %{_libdir}/gnome-applets
+%{_libdir}/gnome-applets/libaccessx-status-applet.so
+%{_libdir}/gnome-applets/libbrightness-applet.so
+%{_libdir}/gnome-applets/libcharacter-picker-applet.so
+%{_libdir}/gnome-applets/libcommand-applet.so
+%{_libdir}/gnome-applets/libcpufreq-applet.so
+%{_libdir}/gnome-applets/libdrive-mount-applet.so
+%{_libdir}/gnome-applets/libgeyes-applet.so
+%{_libdir}/gnome-applets/libgweather-applet.so
+%{_libdir}/gnome-applets/libinhibit-applet.so
+%{_libdir}/gnome-applets/libinvest-applet.so
+%{_libdir}/gnome-applets/libmodem-lights-applet.so
+%{_libdir}/gnome-applets/libmultiload-applet.so
+%{_libdir}/gnome-applets/libnet-speed-applet.so
+%{_libdir}/gnome-applets/libsticky-notes-applet.so
+%{_libdir}/gnome-applets/libtimer-applet.so
+%{_libdir}/gnome-applets/libtrash-applet.so
+%{_libdir}/gnome-applets/libwindow-picker-applet.so
 %{_sysconfdir}/sound/events/battstat_applet.soundlist
 %{_sysconfdir}/dbus-1/system.d/org.gnome.CPUFreqSelector.conf
 %{_datadir}/glib-2.0/schemas/org.gnome.gnome-applets.*
 %{_datadir}/polkit-1/actions/org.gnome.cpufreqselector.policy
 %{_datadir}/dbus-1/system-services/org.gnome.CPUFreqSelector.service
 %{_datadir}/dbus-1/services/*
-%{_datadir}/gnome-panel/5.0/applets/*
+%{_datadir}/gnome-panel/applets/*
 
 
 %changelog
-* Mon Sep 12 2016 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.20.0-2
-- Update cpupower patch for kernel 4.7
+* Sun Mar 26 2017 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.22.0-1
+- new version
 
 * Mon Apr 18 2016 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.20.0-1
 - Version bump for GNOME Flashback 3.20.
