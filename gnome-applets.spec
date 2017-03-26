@@ -80,7 +80,7 @@ autoreconf -i -f
 
 %build
 %configure			\
-	--libexecdir=%{_libexecdir}/gnome-panel \
+	--disable-static	\
 	--enable-suid=no 	\
 	--disable-scrollkeeper 	\
 	--enable-mini-commander \
@@ -100,7 +100,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{po_package} --all-name --with-gnome
 
 # Clean up unpackaged files
-rm -f $RPM_BUILD_ROOT%{_libdir}/gnome-applets/libwindow-picker-applet.{a,la}
+find $RPM_BUILD_ROOT%{_libdir}/gnome-applets/ -name '*.la' -delete
 
 # drop non-XKB support files
 rm -rf $RPM_BUILD_ROOT%{_datadir}/xmodmap
@@ -132,9 +132,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/scalable/apps/*
 %{_datadir}/icons/hicolor/16x16/devices/*
 %{_datadir}/icons/hicolor/24x24/status/*
+%{_bindir}/cpufreq-selector
 %{_datadir}/gnome-applets
 %dir %{_libdir}/gnome-applets
 %{_libdir}/gnome-applets/libaccessx-status-applet.so
+%{_libdir}/gnome-applets/libbattery-status-applet.so
 %{_libdir}/gnome-applets/libbrightness-applet.so
 %{_libdir}/gnome-applets/libcharacter-picker-applet.so
 %{_libdir}/gnome-applets/libcommand-applet.so
@@ -145,6 +147,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/gnome-applets/libinhibit-applet.so
 %{_libdir}/gnome-applets/libinvest-applet.so
 %{_libdir}/gnome-applets/libmodem-lights-applet.so
+%{_libdir}/gnome-applets/libmini-commander-applet.so
 %{_libdir}/gnome-applets/libmultiload-applet.so
 %{_libdir}/gnome-applets/libnet-speed-applet.so
 %{_libdir}/gnome-applets/libsticky-notes-applet.so
