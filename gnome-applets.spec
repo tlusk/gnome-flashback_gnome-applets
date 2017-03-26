@@ -138,7 +138,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/gnome-applets/libbrightness-applet.so
 %{_libdir}/gnome-applets/libcharacter-picker-applet.so
 %{_libdir}/gnome-applets/libcommand-applet.so
-%{_libdir}/gnome-applets/libcpufreq-applet.so
+%{_libdir}/gnome-applets/libcpu-frequency-applet.so
 %{_libdir}/gnome-applets/libdrive-mount-applet.so
 %{_libdir}/gnome-applets/libgeyes-applet.so
 %{_libdir}/gnome-applets/libgweather-applet.so
@@ -156,7 +156,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/glib-2.0/schemas/org.gnome.gnome-applets.*
 %{_datadir}/polkit-1/actions/org.gnome.cpufreqselector.policy
 %{_datadir}/dbus-1/system-services/org.gnome.CPUFreqSelector.service
-%{_datadir}/dbus-1/services/*
 %{_datadir}/gnome-panel/applets/*
 
 
