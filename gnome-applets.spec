@@ -132,6 +132,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/scalable/apps/*
 %{_datadir}/icons/hicolor/16x16/devices/*
 %{_datadir}/icons/hicolor/24x24/status/*
+%{_datadir}/pixmaps/windowbuttons-applet.png
+%{_datadir}/pixmaps/windowtitle-applet.png
 %{_bindir}/cpufreq-selector
 %{_datadir}/gnome-applets
 %dir %{_libdir}/gnome-applets
@@ -153,7 +155,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/gnome-applets/libsticky-notes-applet.so
 %{_libdir}/gnome-applets/libtimer-applet.so
 %{_libdir}/gnome-applets/libtrash-applet.so
+%{_libdir}/gnome-applets/libwindow-buttons-applet.so
 %{_libdir}/gnome-applets/libwindow-picker-applet.so
+%{_libdir}/gnome-applets/libwindow-title-applet.so
 %{_sysconfdir}/sound/events/battstat_applet.soundlist
 %{_sysconfdir}/dbus-1/system.d/org.gnome.CPUFreqSelector.conf
 %{_datadir}/glib-2.0/schemas/org.gnome.gnome-applets.*
